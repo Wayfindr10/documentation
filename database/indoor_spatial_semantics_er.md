@@ -17,7 +17,6 @@ erDiagram
         int id PK
         int building_id FK
         int level
-        varchar name
     }
 
     partitions {
