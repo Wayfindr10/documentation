@@ -2,15 +2,10 @@
 erDiagram
     buildings ||--o{ floors : contains
     floors ||--o{ partitions : contains
-
-    partitions ||--o{ partition_doors : has
-    doors ||--o{ partition_doors : belongs_to
-
+    partitions ||--o{ partition_doors : connects
+    doors ||--o{ partition_doors : used_by
     partitions ||--o{ door_distances : contains
-    doors ||--o{ door_distances : from
-    doors ||--o{ door_distances : to
-
-    partitions ||--o{ pois : contains
+    doors ||--o{ door_partition_distances : reaches
 
     buildings {
         int id PK
@@ -21,14 +16,14 @@ erDiagram
     floors {
         int id PK
         int building_id FK
-        int level "0=ground"
+        int level
         varchar name
     }
 
     partitions {
         int id PK
         int floor_id FK
-        enum type "room, hallway, staircase"
+        varchar type
     }
 
     doors {
@@ -36,8 +31,8 @@ erDiagram
     }
 
     partition_doors {
-        int door_id FK
         int partition_id FK
+        int door_id FK
     }
 
     door_distances {
@@ -47,10 +42,9 @@ erDiagram
         float distance
     }
 
-    pois {
-        int id PK
+    door_partition_distances {
+        int door_id FK
         int partition_id FK
-        varchar name
-        varchar category
+        float distance
     }
 ```
