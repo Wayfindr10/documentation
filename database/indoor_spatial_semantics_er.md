@@ -11,8 +11,6 @@ erDiagram
     doors ||--o{ door_to_door_distances : target
     doors ||--o{ door_partition_reach : reaches
     partitions ||--o{ door_partition_reach : reachable_from
-    doors ||--o{ door_distance_matrix : source
-    doors ||--o{ door_distance_matrix : target
 
     buildings {
         int id PK
@@ -52,9 +50,5 @@ erDiagram
         int partition_id FK
         float max_distance
     }
-    door_distance_matrix {
-        int from_door_id FK
-        int to_door_id FK
-        float distance
-    }
+
 ```
