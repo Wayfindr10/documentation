@@ -1,5 +1,22 @@
 ```mermaid
 erDiagram
+    %% https://docs.ogc.org/cs/20-094/Categories/index.html#venue
+    imdf_venue_category
+
+    imdf_venue_category ||--o{ imdf_venue : "contains (imdf_venue_category)"
+    imdf_address ||--o{ imdf_venue : "contains (imdf_address)"
+
+    imdf_venue {
+        string id PK "FEATURE-ID UUIDv4"
+        string feature_type "venue"
+        polygon geometry "POLYGONAL"
+        string category FK "VENUE-CATEGORY"
+        string name "LABEL"
+        string hours "HOURS | null"
+        json display_point "DISPLAY-POINT | null"
+        string address_id FK "ADDRESS-ID"
+    }
+
     %% https://docs.ogc.org/cs/20-094/Categories/index.html#occupant
     imdf_occupant_category
 
@@ -11,14 +28,14 @@ erDiagram
 
     imdf_amenity_category
 
-    imdf_address ||--o{ imdf_building : "contains (imdf_address)"
+    imdf_venue ||--o{ imdf_building : "contains (imdf_venue)"
 
     %% https://docs.ogc.org/cs/20-094/Address/index.html
     imdf_address {
         string id PK "FEATURE-ID UUIDv4"
         string feature_type "address"
         null geometry
-        string address "Street line"
+        string address "Street Name"
         string locality "City"
         string country "ISO 3166"
     }
@@ -31,7 +48,7 @@ erDiagram
         string feature_type "building"
         null geometry
         json name "LABELS"
-        string address_id FK "ADDRESS-ID"
+        string address_id FK "VENUE-ID"
     }
 
     imdf_building ||--o{ imdf_level : "contains (imdf_building)"
