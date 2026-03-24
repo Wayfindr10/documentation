@@ -1,0 +1,21 @@
+views {
+    view context {
+        title "Wayfindr System Context (C1)"
+        include
+            user,
+            admin,
+            wayfindr,
+            auth
+    }
+
+    view wayfindr_view of wayfindr {
+        title "Wayfindr Container View (C2)"
+        include 
+            *,
+            frontend.*,
+            backend.*, 
+            user_service,
+            staff_service
+        autoLayout TopBottom
+    }
+}
