@@ -6,6 +6,7 @@ views {
             admin,
             wayfindr,
             auth
+        autoLayout TopBottom
     }
 
     view wayfindr_view of wayfindr {
