@@ -43,8 +43,7 @@ jobs:
           # https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#types-of-github-pages-sites
           base: ${{ steps.pages.outputs.base_path }}
           likec4-version: latest
-          with:
-            path: 'c4'
+          path: 'c4'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
