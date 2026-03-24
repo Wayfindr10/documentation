@@ -26,7 +26,7 @@ specification {
         }
     }
     element database {
-        technology 'PostgreSQL'
+        technology '[PostgreSQL]'
 
         style {
             shape cylinder
