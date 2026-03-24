@@ -1,0 +1,8 @@
+model {
+   auth = external 'Authentication API' {
+      icon tech:java
+      description 'Provides user authentication and authorization services'
+      
+      login = component '/login'
+   }
+}
