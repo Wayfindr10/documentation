@@ -1,0 +1,85 @@
+model {
+    user = actor 'User' 
+    admin = actor 'Administator' 
+
+    wayfindr = system 'Wayfindr' {
+        description 'Indoor Navigation App'
+        
+        style {
+            icon https://icons.getbootstrap.com/assets/icons/sign-turn-left.svg
+        }
+
+        frontend = group 'Frontend' {
+            navigation = container 'Navigation' {
+                technology '[iOS, Swift]'
+                icon tech:swift
+
+                style {
+                    shape mobile
+                }
+            }
+
+            staff = container 'Staff' {
+                technology '[iOS, Swift]'
+                icon tech:swift
+
+                style {
+                    shape mobile
+                }
+            }
+        }
+
+        backend = group 'Backend' {
+            #serverless
+
+            user_service = container 'User Service' {
+                #serverless
+                icon tech:java
+                technology '[Java, Spring Boot]'
+
+                style {
+                    multiple true
+                }
+                
+                user_api = component 'User API' {
+                    technology 'Spring Boot'
+                    icon tech:java
+                }
+            }
+
+            indoor_database = database 'Indoor Database' {
+                #live
+            }
+
+            staff_service = container 'Staff Service' {
+                #serverless
+                icon tech:java
+                technology '[Java, Spring Boot]'
+
+                style {
+                    multiple true
+                }
+
+                staff_api = component 'Staff API' {
+                    technology 'Spring Boot'
+                    icon tech:java
+                }
+            }
+
+            staff_database = database 'Staff Database'
+        }
+    }
+
+    user -[GET]-> navigation 'Uses'
+    admin -[GET]-> staff 'Uses'
+
+    staff -[GET]-> auth.login 'Authenticates User'
+
+    staff -[GET]-> staff_api 'Uses'
+    navigation -[GET]-> user_api 'Uses'
+
+    user_api -[PostgresWire]-> indoor_database 'Reads'
+    staff_api -[PostgresWire]-> indoor_database 'Reads/Writes'
+
+    staff_api -[PostgresWire]-> staff_database 'Reads/Wrties'
+}
