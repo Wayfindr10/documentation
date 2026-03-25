@@ -7,6 +7,7 @@ views {
             wayfindr,
             auth
         autoLayout TopBottom
+        rank max { auth }
     }
 
     view wayfindr_view of wayfindr {
