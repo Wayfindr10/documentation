@@ -2,7 +2,7 @@ model {
    auth = external 'Authentication Service' {
       icon tech:java
       technology '[Java, Spring Boot]'
-      description 'Provides user authentication and authorization services'
+      description 'Provides user authentication\nand authorization services'
       
       login = component '/login'
    }
