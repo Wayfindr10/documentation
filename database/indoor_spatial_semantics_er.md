@@ -74,6 +74,7 @@ erDiagram
         string feature_type "unit"
         polygon geometry "POLYGONAL"
         string level_id FK "LEVEL-ID"
+        json name "LABELS"
         string category FK "UNIT-CATEGORY"
         string restriction FK "RESTRICTION-CATEGORY"
     }
