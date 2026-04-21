@@ -2,6 +2,9 @@ model {
     user = actor 'User' 
     admin = actor 'Administator' 
 
+    user -> navigation 'Uses'
+    admin -> staff 'Uses'
+
     wayfindr = system 'Wayfindr' {
         description 'Indoor Navigation App'
         
@@ -17,6 +20,8 @@ model {
                 style {
                     shape mobile
                 }
+
+                -[GET]-> navigation_api 'Uses'
             }
 
             staff = container 'Staff' {
@@ -26,13 +31,22 @@ model {
                 style {
                     shape mobile
                 }
+
+                -[POST]-> staff_api.login 'Authenticates User'
+                -[POST]-> staff_api.logout 'Logout'
+                -[POST]-> staff_api.register 'Registers'
+
+                -[POST]-> navigation_api.level_model_admin_upload 'Fetches a upload url'
+                -[POST]-> navigation_api.level_model_admin_write 'Uploads a .udsz file'
+                -[DELETE]-> navigation_api.level_model_admin_delete 'Deletes a .usdz file'
+                -[GET]-> navigation_api.level_model_read 'Downloads a .udsz file'
             }
         }
 
         backend = group 'Backend' {
             #serverless
 
-            user_service = container 'User Service' {
+            navigation_service = container 'Navigation Service' {
                 #serverless
                 #live
 
@@ -43,9 +57,19 @@ model {
                     multiple true
                 }
                 
-                user_api = component 'User API' {
+                navigation_api = component 'Navigation API' {
+                    description ''
                     technology 'Spring Boot'
                     icon tech:java
+
+                    level_model_admin_upload = component '/api/admin/levels/{levelId}/model/upload-url'
+                    level_model_admin_write = component '/api/admin/levels/{levelId}/model'
+                    level_model_admin_delete = component '/api/admin/levels/{levelId}/model'
+
+                    level_model_read = component '/api/levels/{levelId}/model'
+
+                    -[PostgresWire]-> indoor_database 'Reads/Writes'
+                    -[POST]-> auth.validate 'Validates token'
                 }
             }
 
@@ -67,23 +91,21 @@ model {
                 staff_api = component 'Staff API' {
                     technology 'Spring Boot'
                     icon tech:java
+                    description ''
+
+                    login = component '/auth/login'
+                    logout = component '/auth/logout'
+                    register = component '/auth/register'
+
+                    login -[POST]-> auth.login 'Authenticates User'
+                    logout -[POST]-> auth.logout 'Logout'
+                    register -[POST]-> auth.register 'Registers'
+                    
+                    -[PostgresWire]-> staff_database 'Reads/Wrties'
                 }
             }
 
             staff_database = database 'Staff Database'
         }
     }
-
-    user -[GET]-> navigation 'Uses'
-    admin -[GET]-> staff 'Uses'
-
-    staff -[GET]-> auth.login 'Authenticates User'
-
-    staff -[GET]-> staff_api 'Uses'
-    navigation -[GET]-> user_api 'Uses'
-
-    user_api -[PostgresWire]-> indoor_database 'Reads'
-    staff_api -[PostgresWire]-> indoor_database 'Reads/Writes'
-
-    staff_api -[PostgresWire]-> staff_database 'Reads/Wrties'
 }

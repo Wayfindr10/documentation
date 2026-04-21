@@ -16,7 +16,7 @@ views {
             *,
             frontend.*,
             backend.*, 
-            user_service,
+            navigation_service,
             staff_service
         autoLayout TopBottom
     }
