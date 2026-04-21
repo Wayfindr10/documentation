@@ -44,6 +44,9 @@ specification {
     relationship POST {
         technology 'HTTPS'
     }
+    relationship DELETE {
+        technology 'HTTPS'
+    }
 
     tag live {
         color #00ff0d

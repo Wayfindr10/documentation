@@ -1,9 +1,14 @@
 model {
    auth = external 'Authentication Service' {
+      #live
+
       icon tech:java
       technology '[Java, Spring Boot]'
       description 'Provides user authentication\nand authorization services'
       
-      login = component '/login'
+      login = component '/api/auth/login'
+      logout = component '/api/auth/logout'
+      register = component '/api/auth/register'
+      validate = component '/api/auth/validate'
    }
 }
