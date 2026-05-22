@@ -33,6 +33,14 @@ specification {
             icon tech:postgresql
         }
     }
+    element object_store {
+        technology '[Google Cloud Storage]'
+
+        style {
+            shape cylinder
+            icon gcp:datastore
+        }
+    }
 
     relationship uses
     relationship PostgresWire {
@@ -45,6 +53,9 @@ specification {
         technology 'HTTPS'
     }
     relationship DELETE {
+        technology 'HTTPS'
+    }
+    relationship PUT {
         technology 'HTTPS'
     }
 
