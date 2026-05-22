@@ -21,7 +21,9 @@ model {
                     shape mobile
                 }
 
-                -[GET]-> navigation_api 'Uses'
+                -[GET]-> building_admin 'Fetches all buildings'
+                -[GET]-> building_admin_meta 'Fetches metadata for a specific building'
+                -[GET]-> building_scans 'Fetches the RoomPlan scan JSON for a specific floor number'
             }
 
             staff = container 'Staff' {
@@ -32,14 +34,20 @@ model {
                     shape mobile
                 }
 
-                -[POST]-> staff_api.login 'Authenticates User'
-                -[POST]-> staff_api.logout 'Logout'
-                -[POST]-> staff_api.register 'Registers'
+                -[POST]-> login 'Authenticates User'
+                -[POST]-> logout 'Logout'
+                -[POST]-> register 'Registers'
 
-                -[POST]-> navigation_api.level_model_admin_upload 'Fetches a upload url'
-                -[POST]-> navigation_api.level_model_admin_write 'Uploads a .udsz file'
-                -[DELETE]-> navigation_api.level_model_admin_delete 'Deletes a .usdz file'
-                -[GET]-> navigation_api.level_model_read 'Downloads a .udsz file'
+                -[GET]-> building_admin 'Fetches all buildings'
+                -[POST]-> building_admin 'Creates a new building'
+                -[PUT]-> building_admin_meta 'Updates building name and floor count'
+                -[GET]-> building_scans 'Fetches the RoomPlan scan JSON for a specific floor number'
+                -[POST]-> building_admin_scans 'Upload/overwrite a floors scan'
+
+                -[POST]-> level_model_admin_upload 'Fetches a upload url'
+                -[POST]-> level_model_admin_write 'Uploads a .udsz file'
+                -[DELETE]-> level_model_admin_delete 'Deletes a .usdz file'
+                -[GET]-> level_model_read 'Downloads a .udsz file'
             }
         }
 
@@ -66,14 +74,24 @@ model {
                     level_model_admin_write = component '/api/admin/levels/{levelId}/model'
                     level_model_admin_delete = component '/api/admin/levels/{levelId}/model'
 
+                    building_admin = component '/api/admin/buildings' // Should not be admin
+                    building_admin_meta = component '/api/admin/buildings/{id}' // Should not be admin
+                    building_admin_scans = component '/api/admin/buildings/{id}/scans/{floor}'
+                    building_scans = component '/api/buildings/{id}/scans/{floor}'
+
                     level_model_read = component '/api/levels/{levelId}/model'
 
                     -[PostgresWire]-> indoor_database 'Reads/Writes'
+                    -[POST]-> level_model_store 'Read/Writes'
                     -[POST]-> auth.validate 'Validates token'
                 }
             }
 
             indoor_database = database 'Indoor Database' {
+                #live
+            }
+
+            level_model_store = object_store 'Level model Object Store' {
                 #live
             }
 
